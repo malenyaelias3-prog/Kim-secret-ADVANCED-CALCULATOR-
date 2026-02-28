@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Advanced Equation Calculator</title>
+
+<style>
+body {
+    background: #eaeaea;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.calculator {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 10px;
+    width: 480px;
+}
+.display {
+    width: 100%;
+    height: 55px;
+    font-size: 20px;
+    text-align: right;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+}
+button {
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.num { background: #444; color: white; }
+.op { background: orange; }
+.func { background: #666; color: white; }
+.eq { background: green; color: white; }
+.clr { background: red; color: white; }
+.eqn { background: #0a7; color: white; }
+</style>
+</head>
+
+<body>
+<div class="calculator">
+<input type="text" id="display" class="display" disabled>
+
+<div class="buttons">
+
+<!-- BASIC -->
+<button class="clr" onclick="clearDisplay()">C</button>
+<button class="func" onclick="del()">⌫</button>
+<button class="func" onclick="append('(')">(</button>
+<button class="func" onclick="append(')')">)</button>
+<button class="func" onclick="append('Math.PI')">π</button>
+
+<button class="num" onclick="append('7')">7</button>
+<button class="num" onclick="append('8')">8</button>
+<button class="num" onclick="append('9')">9</button>
+<button class="op" onclick="append('*')">×</button>
+<button class="op" onclick="append('/')">÷</button>
+
+<button class="num" onclick="append('4')">4</button>
+<button class="num" onclick="append('5')">5</button>
+<button class="num" onclick="append('6')">6</button>
+<button class="op" onclick="append('+')">+</button>
+<button class="op" onclick="append('-')">−</button>
+
+<button class="num" onclick="append('1')">1</button>
+<button class="num" onclick="append('2')">2</button>
+<button class="num" onclick="append('3')">3</button>
+<button class="num" onclick="append('0')">0</button>
+<button class="eq" onclick="calculate()">=</button>
+
+<!-- SCIENTIFIC -->
+<button class="func" onclick="sqrt()">√</button>
+<button class="func" onclick="cbrt()">³√</button>
+<button class="func" onclick="power()">^</button>
+<button class="func" onclick="factorial()">!</button>
+<button class="func" onclick="inverse()">1/x</button>
+
+<button class="func" onclick="sin()">sin</button>
+<button class="func" onclick="cos()">cos</button>
+<button class="func" onclick="tan()">tan</button>
+<button class="func" onclick="log()">log</button>
+<button class="func" onclick="ln()">ln</button>
+
+<!-- NEW FUNCTIONS -->
+<button class="func" onclick="squareX()">x²</button>
+<button class="func" onclick="cubeX()">x³</button>
+<button class="func" onclick="areaCircle()">πr²</button>
+
+<!-- ALGEBRA -->
+<button class="eqn" onclick="solveLinear()">ax+b=0</button>
+<button class="eqn" onclick="solveQuadratic()">ax²+bx+c</button>
+<button class="eqn" onclick="solveSimultaneous()">Simultaneous</button>
+<button class="eqn" onclick="identity()">Identity</button>
+<button class="eqn" onclick="exponent()">Exponent</button>
+
+<!-- STATISTICS -->
+<button class="eqn" onclick="mean()">Mean</button>
+<button class="eqn" onclick="variance()">Variance</button>
+<button class="eqn" onclick="stdDev()">Std Dev</button>
+<button class="eqn" onclick="polar()">Polar</button>
+
+<!-- MATRIX -->
+<button class="eqn" onclick="matrixDet()">Determinant</button>
+<button class="eqn" onclick="matrixInv()">Matrix Inverse</button>
+
+<!-- CALCULUS -->
+<button class="eqn" onclick="differentiate()">dy/dx</button>
+<button class="eqn" onclick="integrate()">∫f(x)dx</button>
+
+<!-- ENGINEERING -->
+<button class="eqn" onclick="sciNotation()">Sci Not</button>
+<button class="eqn" onclick="angleUnits()">Deg/Rad/Grad</button>
+
+</div>
+</div>
+
+<script>
+let display = document.getElementById("display");
+
+/* BASIC */
+function append(v){ display.value += v; }
+function clearDisplay(){ display.value = ""; }
+function del(){ display.value = display.value.slice(0,-1); }
+function calculate(){ try{ display.value = eval(display.value); } catch{ display.value="Error"; } }
+
+/* SCIENTIFIC */
+function sqrt(){ display.value = Math.sqrt(display.value); }
+function cbrt(){ display.value = Math.cbrt(display.value); }
+function power(){ display.value += "**"; }
+function factorial(){ let n=+display.value,f=1; for(let i=1;i<=n;i++)f*=i; display.value=f; }
+function inverse(){ display.value = 1/display.value; }
+function sin(){ display.value = Math.sin(toRad(display.value)); }
+function cos(){ display.value = Math.cos(toRad(display.value)); }
+function tan(){ display.value = Math.tan(toRad(display.value)); }
+function log(){ display.value = Math.log10(display.value); }
+function ln(){ display.value = Math.log(display.value); }
+function toRad(x){ return x*Math.PI/180; }
+
+/* NEW FUNCTIONS */
+function squareX(){ display.value = Math.pow(display.value,2); }
+function cubeX(){ display.value = Math.pow(display.value,3); }
+function areaCircle(){ let r=+prompt("Enter radius r"); display.value = Math.PI*r*r; }
+
+/* ALGEBRA */
+function solveLinear(){ let a=+prompt("a"),b=+prompt("b"); display.value="x="+(-b/a); }
+function solveQuadratic(){ let a=+prompt("a"),b=+prompt("b"),c=+prompt("c"); let d=b*b-4*a*c; if(d<0){display.value="No real roots";return;} display.value=`x1=${(-b+Math.sqrt(d))/(2*a)}, x2=${(-b-Math.sqrt(d))/(2*a)}`; }
+function solveSimultaneous(){ let a=+prompt("a"),b=+prompt("b"),c=+prompt("c"); let d=+prompt("d"),e=+prompt("e"),f=+prompt("f"); let det=a*e-b*d; if(det==0){display.value="No solution";return;} display.value=`x=${(c*e-b*f)/det}, y=${(a*f-c*d)/det}`; }
+function identity(){ let a=+prompt("a"),b=+prompt("b"); display.value=`(a+b)²=${(a+b)**2}, a²-b²=${a*a-b*b}`; }
+function exponent(){ display.value = Math.exp(display.value); }
+
+/* STATISTICS */
+function getList(){ return prompt("Enter numbers separated by comma").split(',').map(Number); }
+function mean(){ let x=getList(); display.value=x.reduce((a,b)=>a+b)/x.length; }
+function variance(){ let x=getList(),m=x.reduce((a,b)=>a+b)/x.length; display.value=x.reduce((s,v)=>s+(v-m)**2,0)/x.length; }
+function stdDev(){ let x=getList(),m=x.reduce((a,b)=>a+b)/x.length; display.value=Math.sqrt(x.reduce((s,v)=>s+(v-m)**2,0)/x.length); }
+function polar(){ let x=+prompt("x"),y=+prompt("y"); display.value=`r=${Math.hypot(x,y)}, θ=${Math.atan2(y,x)*180/Math.PI}`; }
+
+/* MATRIX */
+function matrixDet(){ let a=+prompt("a"),b=+prompt("b"),c=+prompt("c"),d=+prompt("d"); display.value=a*d-b*c; }
+function matrixInv(){ let a=+prompt("a"),b=+prompt("b"),c=+prompt("c"),d=+prompt("d"); let det=a*d-b*c; if(det==0){display.value="No inverse";return;} display.value=`[${d/det},${-b/det};${-c/det},${a/det}]`; }
+
+/* CALCULUS */
+function differentiate(){ let f=x=>eval(prompt("Enter f(x) e.g x*x")); let x=+prompt("x"),h=0.0001; display.value=(f(x+h)-f(x-h))/(2*h); }
+function integrate(){ let f=x=>eval(prompt("Enter f(x) e.g x*x")); let a=+prompt("a"),b=+prompt("b"),n=100,h=(b-a)/n,sum=0; for(let i=0;i<n;i++) sum+=f(a+i*h); display.value=sum*h; }
+
+/* ENGINEERING */
+function sciNotation(){ display.value=Number(display.value).toExponential(); }
+function angleUnits(){ let d=+prompt("Degrees"); display.value=`rad=${d*Math.PI/180}, grad=${d*10/9}`; }
+</script>
+
+</body>
+</html>
